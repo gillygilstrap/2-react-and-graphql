@@ -8,6 +8,7 @@ const client = new Client({
 const ALL_BOOKS_QUERY = `
 {
   books {
+    id
     title
     author {
       name
@@ -23,7 +24,7 @@ const Library = () => (
           <h1>{`The library is ${loaded ? "open" : "loading..."}`}</h1>
           {data &&
             data.books.map(book => (
-              <p>
+              <p key={book.id}>
                 <i>{book.title}</i> by {book.author.name}
               </p>
             ))}
