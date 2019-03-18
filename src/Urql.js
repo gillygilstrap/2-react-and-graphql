@@ -1,7 +1,7 @@
 import React from "react";
-import { Provider, Client, Connect, query } from "urql";
+import { Provider, createClient, Query } from "urql";
 
-const client = new Client({
+const client = createClient({
   url: "http://localhost:4000/graphql"
 });
 
@@ -17,11 +17,11 @@ const ALL_BOOKS_QUERY = `
 }`;
 
 const Library = () => (
-  <Provider client={client}>
-    <Connect query={query(ALL_BOOKS_QUERY)}>
-      {({ loaded, data }) => (
+  <Provider value={client}>
+    <Query query={ALL_BOOKS_QUERY}>
+      {({ fetching, data }) => (
         <div>
-          <h1>{`The library is ${loaded ? "open" : "loading..."}`}</h1>
+          <h1>{`The library is ${fetching ? "loading..." : "open"}`}</h1>
           {data &&
             data.books.map(book => (
               <p key={book.id}>
@@ -30,7 +30,7 @@ const Library = () => (
             ))}
         </div>
       )}
-    </Connect>
+    </Query>
   </Provider>
 );
 
