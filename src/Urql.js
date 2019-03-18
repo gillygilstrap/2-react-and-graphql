@@ -17,21 +17,25 @@ const ALL_BOOKS_QUERY = `
 }`;
 
 const Library = () => (
+  <Query query={ALL_BOOKS_QUERY}>
+    {({ fetching, data }) => (
+      <div>
+        <h1>{`The library is ${fetching ? "loading..." : "open"}`}</h1>
+        {data &&
+          data.books.map(book => (
+            <p key={book.id}>
+              <i>{book.title}</i> by {book.author.name}
+            </p>
+          ))}
+      </div>
+    )}
+  </Query>
+);
+
+const WrappedLibrary = () => (
   <Provider value={client}>
-    <Query query={ALL_BOOKS_QUERY}>
-      {({ fetching, data }) => (
-        <div>
-          <h1>{`The library is ${fetching ? "loading..." : "open"}`}</h1>
-          {data &&
-            data.books.map(book => (
-              <p key={book.id}>
-                <i>{book.title}</i> by {book.author.name}
-              </p>
-            ))}
-        </div>
-      )}
-    </Query>
+    <Library />
   </Provider>
 );
 
-export default Library;
+export default WrappedLibrary;

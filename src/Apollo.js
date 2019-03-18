@@ -20,21 +20,25 @@ const ALL_BOOKS_QUERY = gql`
 `;
 
 const Library = () => (
+  <Query query={ALL_BOOKS_QUERY}>
+    {({ loading, data }) => (
+      <div>
+        <h1>{`The library is ${loading ? "loading..." : "open"}`}</h1>
+        {data.books &&
+          data.books.map(book => (
+            <p key={book.id}>
+              <i>{book.title}</i> by {book.author.name}
+            </p>
+          ))}
+      </div>
+    )}
+  </Query>
+);
+
+const WrappedLibrary = () => (
   <ApolloProvider client={client}>
-    <Query query={ALL_BOOKS_QUERY}>
-      {({ loading, data }) => (
-        <div>
-          <h1>{`The library is ${loading ? "loading..." : "open"}`}</h1>
-          {data.books &&
-            data.books.map(book => (
-              <p key={book.id}>
-                <i>{book.title}</i> by {book.author.name}
-              </p>
-            ))}
-        </div>
-      )}
-    </Query>
+    <Library />
   </ApolloProvider>
 );
 
-export default Library;
+export default WrappedLibrary;
